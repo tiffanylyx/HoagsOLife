@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v4.js"></script>
+<style>
+.xAxis line {
+  stroke: #B8B8B8;
+}
+/*
+body{
+  background-image:url(8.png);
+  background-size: 1300px 1115px
+}
+*/
+.select1{
+  opacity: 1;
+  fill : #EEEEEE;
+
+}
+.origin_path{
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1;
+  opacity: 0
+}
+</style>
+<!-- Create a div where the graph will take place -->
+<body bgcolor="#000000">
+<div id="my_dataviz">
+</div>
+</body>
+<!-- Style -->
+
+
+<!-- Viridis color palette-->
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+
+<script>
+// set the dimensions and margins of the graph
+
+var width = 700 
+var height = 700
+var margin = 10
+var y = ''
+// append the svg object to the body of the page
+svg = d3.select("#my_dataviz")
+  .append("svg")
+      .attr("viewBox", [-width/1.877 , -height/3.05, width, height])
+      .attr("stroke-linejoin", "round")
+      .attr("stroke-linecap", "round");
+svg.append('image')
+.attr("xlink:href", "background.png")
+.attr("x", "-457.5")
+.attr("y", "-226.3")
+.attr("width", "880")
+.attr("height", "453");
+var innerRadius1 = 130
+var innerRadius2 = 84
+var outerRadius1 = 215
+var outerRadius2 = 117
+
+var leg1 = svg.append("circle").attr("cx",190).attr("cy",-180).attr("r", 1.5).style("fill", "#05e488")
+var leg2 = svg.append("circle").attr("cx",190).attr("cy",-170).attr("r", 1.5).style("fill", "#d4e009")
+var leg3 = svg.append("circle").attr("cx",190).attr("cy",-160).attr("r", 1.5).style("fill", "#e05509")
+
+var leg4 = svg.append("circle").attr("cx",190).attr("cy",-150).attr("r", 1.5).style("fill", "#ff2a2a")
+
+var leg5 = svg.append("circle").attr("cx",190).attr("cy",-140).attr("r", 1.5).style("fill", "#0694de")
+var leg6 = svg.append("circle").attr("cx",190).attr("cy",-130).attr("r", 1.5).style("fill", "#004aff")
+/*
+var leg7 = svg.append("circle").attr("cx",310).attr("cy",-180).attr("r", 1.5).style("fill", "#004aff")
+/*
+var leg8 = svg.append("circle").attr("cx",250).attr("cy",-170).attr("r", 1.5).style("fill", "#004aff")
+var leg9 = svg.append("circle").attr("cx",250).attr("cy",-160).attr("r", 1.5).style("fill", "#004aff")
+var leg10 = svg.append("circle").attr("cx",250).attr("cy",-150).attr("r", 1.5).style("fill", "#004aff")
+
+var leg11 = svg.append("circle").attr("cx",310).attr("cy",-120).attr("r", 1.5).style("fill", "#004aff")
+*/
+
+svg.append("text").attr("x",200).attr("y",-180).text("First Up (From 1055 to 1078)").style("font-size", "7px").attr("alignment-baseline","middle").style("fill","#FFFFFF")
+svg.append("text").attr("x",200).attr("y",-170).text("First Down (From 1079 to 1084)").style("font-size", "7px").attr("alignment-baseline","middle").style("fill","#FFFFFF")
+svg.append("text").attr("x", 200).attr("y", -160).text("Second Up (From 1085 to 1088)").style("font-size", "7px").attr("alignment-baseline","middle").style("fill","#FFFFFF")
+svg.append("text").attr("x", 200).attr("y", -150).text("Second Down (From 1089 to 1090)").style("font-size", "7px").attr("alignment-baseline","middle").style("fill","#FFFFFF")
+svg.append("text").attr("x", 200).attr("y", -140).text("Third Up (From 1091 to 1092)").style("font-size", "7px").attr("alignment-baseline","middle").style("fill","#FFFFFF")
+svg.append("text").attr("x", 200).attr("y", -130).text("Third Down (From 1093 to 1101)").style("font-size", "7px").attr("alignment-baseline","middle").style("fill","#FFFFFF")
+/*
+svg.append("text").attr("x", 300).attr("y", -180).text("Hangzhou").style("font-size", "7px").attr("alignment-baseline","middle").style("fill","#FFFFFF")
+svg.append("text").attr("x", 300).attr("y", -170).text("Kaifeng").style("font-size", "7px").attr("alignment-baseline","middle").style("fill","#FFFFFF")
+svg.append("text").attr("x", 300).attr("y", -160).text("Huanggang").style("font-size", "7px").attr("alignment-baseline","middle").style("fill","#FFFFFF")
+svg.append("text").attr("x", 300).attr("y", -150).text("Danzhou").style("font-size", "7px").attr("alignment-baseline","middle").style("fill","#FFFFFF")
+
+*/
+
+var circle = []
+var circle1 = []
+var path0 = []
+var path1 = []
+var path2 = []
+var path3 = []
+var path4 = []
+var path5 = []
+function my_color(d){
+var a =d.age_class
+            if (a==1){
+              return "#32c05b"
+            } 
+            else if (a=='2'){
+              return "#b9c411"
+            } 
+            else if (a=='3'){
+              return "#e05509"
+            } 
+            else if (a=='4'){
+              return "#ff2a2a"
+            } 
+            else if (a=='5'){
+              return "#0f79b4"
+            } 
+            else if (a=='6'){
+              return "#004aff"
+            } 
+            
+}
+data_res = [[],[],[],[],[],[]]
+myimage = svg.append('image')
+.attr("xlink:href", "HoagOLife_wordle/wordcloud_new.png")
+.attr("x", "-60")
+.attr("y", "-60")
+.attr("width", "120")
+.attr("height", "120");
+d3.csv("data/place_and_dist_version2.csv",
+  // When reading the csv, I must format variables:
+  
+  // Now I can use this dataset:
+  function(data) {
+
+for(i in data){
+  var a = parseInt(data[i]['age_class2'])
+  if(a==1){
+    data_res[0].push(data[i])
+  }
+  else if(a==2){
+    data_res[1].push(data[i])
+  }
+  else if(a==3){
+    data_res[2].push(data[i])
+  }
+  else if((a==4)){
+    data_res[3].push(data[i])
+  }
+  else if(a==5){
+    data_res[4].push(data[i])
+  }
+  else if(a==6){
+    data_res[5].push(data[i])
+  }
+}
+
+x = d3.scaleLinear()
+    .domain([0,1])
+    .range([0, 2 * Math.PI])
+y = d3.scaleLinear()
+    .domain([0,340])
+    .range([innerRadius1,outerRadius1]) 
+line = d3.lineRadial()
+    .angle(d => x(d.x_axis))
+
+
+path0 = svg.append("path")
+      .attr("class","origin_path")
+      .attr("d", line
+          .radius(d => y(d.distance))
+        (data_res[0]));
+path0Length = path0.node().getTotalLength()
+path1 = svg.append("path")
+      .attr("class","origin_path")
+      .attr("d", line
+          .radius(d => y(d.distance))
+        (data_res[1]));
+path1Length = path1.node().getTotalLength()
+path2 = svg.append("path")
+      .attr("class","origin_path")
+      .attr("d", line
+          .radius(d => y(d.distance))
+        (data_res[2]));
+path2Length = path2.node().getTotalLength()
+path3 = svg.append("path")
+      .attr("class","origin_path")
+      .attr("d", line
+          .radius(d => y(d.distance))
+        (data_res[3]));
+path3Length = path3.node().getTotalLength()
+path4 = svg.append("path")
+      .attr("class","origin_path")
+      .attr("d", line
+          .radius(d => y(d.distance))
+        (data_res[4]));
+path4Length = path4.node().getTotalLength()
+path5 = svg.append("path")
+      .attr("class","origin_path")
+      .attr("d", line
+          .radius(d => y(d.distance))
+        (data_res[5]));
+path5Length = path5.node().getTotalLength()
+circle = svg.append("g")
+      .selectAll("dot")
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("fill", function(d){  
+        var a =d.age_class2
+            if (a==1){
+              return "#32c05b"
+            } 
+            else if (a=='2'){
+              return "#b9c411"
+            } 
+            else if (a=='3'){
+              return "#e05509"
+            } 
+            else if (a=='4'){
+              return "#ff2a2a"
+            } 
+            else if (a=='5'){
+              return "#0f79b4"
+            } 
+            else if (a=='6'){
+              return "#004aff"
+            } 
+            })
+      .attr("r", function(d){
+        return d.r
+      })
+     .attr("opacity",1)
+      .attr("cx", function(d){
+        return d3.pointRadial(x(d.x_axis),y(d.distance))[0]
+      })
+      .attr("cy", function(d){
+        return d3.pointRadial(x(d.x_axis),y(d.distance))[1]
+      })
+})
+d3.csv("data/work_info_new.csv",
+  // When reading the csv, I must format variables:
+ 
+  // Now I can use this dataset:
+  function(data) {
+x = d3.scaleLinear()
+    .domain([0,1])
+    .range([0, 2 * Math.PI])
+y2 = d3.scaleLinear()
+    .domain([0,1])
+    .range([innerRadius2,outerRadius2]) 
+circle1 = svg.append("g")
+      .selectAll("dot")
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("class", "select1")
+      .attr("r", 0.59)
+      .attr("cx", function(d){
+        return d3.pointRadial(x(d.x_axis),y2(d.senti))[0]
+      })
+      .attr("cy", function(d){
+        return d3.pointRadial(x(d.x_axis),y2(d.senti))[1]
+      })
+})
+
+// D3 provides lots of transition options, have a play around here:
+// https://github.com/d3/d3-transition
+const transitionPath1 = d3
+  .transition()
+  .ease(d3.easeSin)
+  .duration(5000);
+
+
+leg1.on("mouseover", function(){return circle.style("opacity",function(d){ 
+            var a =d.age_class2
+            if (a==1){
+              return 1
+            }
+            else {return 0.3}}),
+
+            circle1
+            .style("opacity",function(d){ 
+            var a =d.age_class
+            if (a==1){
+              return 1
+            }
+            else {return 0.1}}),
+      path0.style("opacity",1)
+      .attr("stroke-dashoffset", path0Length)
+      .attr("stroke-dasharray", path0Length)
+      .transition(transitionPath1)
+      .attr("stroke-dashoffset", 0),
+      myimage .attr("xlink:href", "HoagOLife_wordle/wordcloud1_new.png").attr("x", "-65")
+.attr("y", "-65")
+.attr("width", "130")
+.attr("height", "130");
+      ;})
+leg1.on("mouseout", function(){return circle.style("opacity",0.3),circle1.style("opacity",0.1),path0.style("opacity",0)})
+leg2.on("mouseover", function(){return circle.style("opacity",function(d){ 
+            var a =d.age_class2
+            if (a==2){
+              return 1
+            }
+            else {return 0.3}}),
+
+            circle1.style("opacity",function(d){ 
+            var a =d.age_class
+            if (a==2){
+              return 1
+            }
+            else {return 0.1}}),
+      path1.style("opacity",1)
+      .attr("stroke-dashoffset", path1Length)
+      .attr("stroke-dasharray", path1Length)
+      .transition(transitionPath1)
+      .attr("stroke-dashoffset", 0),
+            myimage.attr("xlink:href", "HoagOLife_wordle/wordcloud2_new.png")
+.attr("x", "-65")
+.attr("y", "-65")
+.attr("width", "130")
+.attr("height", "130")
+            })
+leg2.on("mouseout", function(){return circle.style("opacity",0.3),circle1.style("opacity",0.1),path1.style("opacity",0)  })
+leg3.on("mouseover", function(){return circle.style("opacity",function(d){ 
+            var a =d.age_class2
+            if (a==3){
+              return 1
+            }
+            else {return 0.3}}),
+
+            circle1.style("opacity",function(d){ 
+            var a =d.age_class
+            if (a==3){
+              return 1
+            }
+            else {return 0.1}}),
+      path2.style("opacity",1)
+      .attr("stroke-dashoffset", path2Length)
+      .attr("stroke-dasharray", path2Length)
+      .transition(transitionPath1)
+      .attr("stroke-dashoffset", 0),
+      myimage.attr("xlink:href", "HoagOLife_wordle/wordcloud3_new.png")
+.attr("x", "-65")
+.attr("y", "-65")
+.attr("width", "130")
+.attr("height", "130");
+          })
+
+leg3.on("mouseout", function(){return circle.style("opacity",0.3),circle1.style("opacity",0.1),path2.style("opacity",0)  })
+
+leg4.on("mouseover", function(){return circle.style("opacity",function(d){ 
+            var a =d.age_class2
+            if ((a==4)){
+              return 1
+            }
+            else {return 0.3}}),
+
+            circle1.style("opacity",function(d){ 
+            var a =d.age_class
+            if ((a==4)){
+              return 1
+            }
+            else {return 0.1}}),
+      path3.style("opacity",1)
+      .attr("stroke-dashoffset", path3Length)
+      .attr("stroke-dasharray", path3Length)
+      .transition(transitionPath1)
+      .attr("stroke-dashoffset", 0),
+          myimage .attr("xlink:href", "HoagOLife_wordle/wordcloud4_new.png")
+.attr("x", "-65")
+.attr("y", "-65")
+.attr("width", "130")
+.attr("height", "130")
+;})
+leg4.on("mouseout", function(){return circle.style("opacity",0.3),circle1.style("opacity",0.1),path3.style("opacity",0)  })
+
+leg5.on("mouseover", function(){return circle.style("opacity",function(d){ 
+            var a =d.age_class2
+            if (a==5){
+              return 1
+            }
+            else {return 0.3}}),
+
+            circle1.style("opacity",function(d){ 
+            var a =d.age_class
+            if (a==5){
+              return 1
+            }
+            else {return 0.1}}),
+      path4.style("opacity",1)
+      .attr("stroke-dashoffset", path4Length)
+      .attr("stroke-dasharray", path4Length)
+      .transition(transitionPath1)
+      .attr("stroke-dashoffset", 0),
+          myimage.attr("xlink:href", "HoagOLife_wordle/wordcloud5_new.png")
+.attr("x", "-65")
+.attr("y", "-65")
+.attr("width", "130")
+.attr("height", "130");})
+leg5.on("mouseout", function(){return circle.style("opacity",0.3),circle1.style("opacity",0.1),path4.style("opacity",0)  })
+leg6.on("mouseover", function(){return circle.style("opacity",function(d){ 
+            var a =d.age_class2
+            if (a==6){
+              return 1
+            }
+            else {return 0.3}}),
+
+            circle1.style("opacity",function(d){ 
+            var a =d.age_class
+            if (a==6){
+              return 1
+            }
+            else {return 0.1}}),
+      path5.style("opacity",1)
+      .attr("stroke-dashoffset", path5Length)
+      .attr("stroke-dasharray", path5Length)
+      .transition(transitionPath1)
+      .attr("stroke-dashoffset", 0),
+         myimage.attr("xlink:href", "HoagOLife_wordle/wordcloud6_new.png")
+.attr("x", "-65")
+.attr("y", "-65")
+.attr("width", "130")
+.attr("height", "130")})
+leg6.on("mouseout", function(){return circle.style("opacity",0.3),circle1.style("opacity",0.1),path5.style("opacity",0)  })
+/*
+leg7.on("mouseover", function(){return circle1.style("opacity",function(d){ 
+            var a =d.place
+            var b = d.age_class
+            if ((a=='Hangzhou')&(b==1)){
+              return 1
+            }
+            else {return 0.1}})})
+leg7.on("mouseout", function(){return circle.style("opacity",0.3),circle1.style("opacity",0.1)})/*
+leg8.on("mouseover", function(){return circle.style("opacity",function(d){ 
+            var a =d.place
+            if (a=='Kaifeng'){
+              return 1
+            }
+            else {return 0.3}}),
+            circle1.style("opacity",function(d){ 
+            var a =d.place
+            if (a=='Kaifeng'){
+              return 1
+            }
+            else {return 0.1}})})
+leg8.on("mouseout", function(){return circle.style("opacity",0.3),circle1.style("opacity",0.1)})
+leg9.on("mouseover", function(){return circle.style("opacity",function(d){ 
+            var a =d.place
+            if (a=='Huanggang'){
+              return 1
+            }
+            else {return 0.3}}),
+            circle1.style("opacity",function(d){ 
+            var a =d.place
+            if (a=='Huanggang'){
+              return 1
+            }
+            else {return 0.1}})})
+leg9.on("mouseout", function(){return circle.style("opacity",0.3),circle1.style("opacity",0.1)})
+leg10.on("mouseover", function(){return circle.style("opacity",function(d){ 
+            var a =d.place
+            if (a=='Danzhou'){
+              return 1
+            }
+            else {return 0.3}}),
+            circle1.style("opacity",function(d){ 
+            var a =d.place
+            if (a=='Danzhou'){
+              return 1
+            }
+            else {return 0.1}})})
+leg10.on("mouseout", function(){return circle.style("opacity",0.3),circle1.style("opacity",0.1)})
+
+leg11.on("mouseover", function(){return circle.style("opacity",function(d){ 
+            var a =d.place
+            if ((a=='Meishan')|(a=='Xuzhou')|(a=='Taizhou')|(a=='Ganzhou')|(a=='Changzhou')|(a=='Qizhou')|(a=='Lianyungang')|(a=='Leshan')){
+              return 1
+            }
+            else {return 0.3}}),
+circle1.style('opacity',1)})
+*/
+
+</script>

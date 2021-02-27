@@ -3,7 +3,14 @@
 
 <!-- Load d3.js -->
 <script src="https://d3js.org/d3.v4.js"></script>
-<style>
+<style> 
+.all{position:relative;width:1200px;height:600px} 
+.my_dataviz{ position:absolute;left:0px;top:30px;z-index:0;background:#000;width:1200px;height:600px} 
+/* div背景色为红色 */ 
+.Text{ position:absolute;left:800px;top:170px;z-index:30;background:#FF0;width:400px;height:200px} 
+/* 背景为黄色 */ 
+.Map{ position:absolute;left:800px;top:370px;z-index:70;background:#00F;width:400px;height:300px} 
+/* 背景为蓝色 */ 
 .xAxis line {
   stroke: #B8B8B8;
 }
@@ -27,7 +34,13 @@ body{
 </style>
 <!-- Create a div where the graph will take place -->
 <body bgcolor="#000000">
-<div id="my_dataviz">
+<div class="all">
+  <div class="my_dataviz" id='my_dataviz'>
+  </div>
+  <div class="Text" id='Text'>
+  </div>
+  <div class="Map" id='Map'>
+  </div>
 </div>
 </body>
 <!-- Style -->
@@ -39,35 +52,37 @@ body{
 <script>
 // set the dimensions and margins of the graph
 
-var width = 700 
-var height = 700
+var width = 650
+var height = 400
 var margin = 10
 var y = ''
 // append the svg object to the body of the page
 svg = d3.select("#my_dataviz")
   .append("svg")
-      .attr("viewBox", [-width/1.877 , -height/3.05, width, height])
-      .attr("stroke-linejoin", "round")
-      .attr("stroke-linecap", "round");
 svg.append('image')
 .attr("xlink:href", "background.png")
-.attr("x", "-455.5")
-.attr("y", "-226.3")
-.attr("width", "880")
-.attr("height", "453");
-var innerRadius1 = 130
-var innerRadius2 = 84
-var outerRadius1 = 215
-var outerRadius2 = 117
+.attr("x", "-314")
+.attr("y", "-201")
+.attr("width", "600")
+.attr("height", "400");
 
-var leg1 = svg.append("circle").attr("cx",190).attr("cy",-180).attr("r", 1.5).style("fill", "#05e488")
-var leg2 = svg.append("circle").attr("cx",190).attr("cy",-170).attr("r", 1.5).style("fill", "#d4e009")
-var leg3 = svg.append("circle").attr("cx",190).attr("cy",-160).attr("r", 1.5).style("fill", "#e05509")
+svg.attr("viewBox", [-width/2.7 , -height/2.2, width, height])
+      .attr("stroke-linejoin", "round")
+      .attr("stroke-linecap", "round");
 
-var leg4 = svg.append("circle").attr("cx",190).attr("cy",-150).attr("r", 1.5).style("fill", "#ff2a2a")
+var innerRadius1 = 110
+var innerRadius2 = 70
+var outerRadius1 = 184
+var outerRadius2 = 96
 
-var leg5 = svg.append("circle").attr("cx",190).attr("cy",-140).attr("r", 1.5).style("fill", "#0694de")
-var leg6 = svg.append("circle").attr("cx",190).attr("cy",-130).attr("r", 1.5).style("fill", "#004aff")
+var leg1 = svg.append("circle").attr("cx",193).attr("cy",-175).attr("r", 1.5).style("fill", "#05e488")
+var leg2 = svg.append("circle").attr("cx",193).attr("cy",-165).attr("r", 1.5).style("fill", "#d4e009")
+var leg3 = svg.append("circle").attr("cx",193).attr("cy",-155).attr("r", 1.5).style("fill", "#e05509")
+
+var leg4 = svg.append("circle").attr("cx",193).attr("cy",-145).attr("r", 1.5).style("fill", "#ff2a2a")
+
+var leg5 = svg.append("circle").attr("cx",193).attr("cy",-135).attr("r", 1.5).style("fill", "#0694de")
+var leg6 = svg.append("circle").attr("cx",193).attr("cy",-125).attr("r", 1.5).style("fill", "#004aff")
 /*
 var leg7 = svg.append("circle").attr("cx",310).attr("cy",-180).attr("r", 1.5).style("fill", "#004aff")
 /*
@@ -78,12 +93,12 @@ var leg10 = svg.append("circle").attr("cx",250).attr("cy",-150).attr("r", 1.5).s
 var leg11 = svg.append("circle").attr("cx",310).attr("cy",-120).attr("r", 1.5).style("fill", "#004aff")
 */
 
-svg.append("text").attr("x",200).attr("y",-180).text("First Up (From 1055 to 1078)").style("font-size", "7px").attr("alignment-baseline","middle").style("fill","#FFFFFF")
-svg.append("text").attr("x",200).attr("y",-170).text("First Down (From 1079 to 1084)").style("font-size", "7px").attr("alignment-baseline","middle").style("fill","#FFFFFF")
-svg.append("text").attr("x", 200).attr("y", -160).text("Second Up (From 1085 to 1088)").style("font-size", "7px").attr("alignment-baseline","middle").style("fill","#FFFFFF")
-svg.append("text").attr("x", 200).attr("y", -150).text("Second Down (From 1089 to 1090)").style("font-size", "7px").attr("alignment-baseline","middle").style("fill","#FFFFFF")
-svg.append("text").attr("x", 200).attr("y", -140).text("Third Up (From 1091 to 1092)").style("font-size", "7px").attr("alignment-baseline","middle").style("fill","#FFFFFF")
-svg.append("text").attr("x", 200).attr("y", -130).text("Third Down (From 1093 to 1101)").style("font-size", "7px").attr("alignment-baseline","middle").style("fill","#FFFFFF")
+var text1 = svg.append("text").attr("x",203).attr("y",-175).text("First Up (From 1055 to 1078)").style("font-size", "7px").attr("alignment-baseline","middle").style("fill","#FFFFFF")
+var text2 = svg.append("text").attr("x",203).attr("y",-165).text("First Down (From 1079 to 1084)").style("font-size", "7px").attr("alignment-baseline","middle").style("fill","#FFFFFF")
+var text3 = svg.append("text").attr("x", 203).attr("y", -155).text("Second Up (From 1085 to 1088)").style("font-size", "7px").attr("alignment-baseline","middle").style("fill","#FFFFFF")
+var text4 = svg.append("text").attr("x", 203).attr("y", -145).text("Second Down (From 1089 to 1090)").style("font-size", "7px").attr("alignment-baseline","middle").style("fill","#FFFFFF")
+var text5 = svg.append("text").attr("x", 203).attr("y", -135).text("Third Up (From 1091 to 1092)").style("font-size", "7px").attr("alignment-baseline","middle").style("fill","#FFFFFF")
+var text6 = svg.append("text").attr("x", 203).attr("y", -125).text("Third Down (From 1093 to 1101)").style("font-size", "7px").attr("alignment-baseline","middle").style("fill","#FFFFFF")
 /*
 svg.append("text").attr("x", 300).attr("y", -180).text("Hangzhou").style("font-size", "7px").attr("alignment-baseline","middle").style("fill","#FFFFFF")
 svg.append("text").attr("x", 300).attr("y", -170).text("Kaifeng").style("font-size", "7px").attr("alignment-baseline","middle").style("fill","#FFFFFF")
@@ -125,10 +140,10 @@ var a =d.age_class
 data_res = [[],[],[],[],[],[]]
 myimage = svg.append('image')
 .attr("xlink:href", "HoagOLife_wordle/wordcloud_new.png")
-.attr("x", "-60")
-.attr("y", "-60")
-.attr("width", "120")
-.attr("height", "120");
+.attr("x", "-50")
+.attr("y", "-50")
+.attr("width", "100")
+.attr("height", "100");
 d3.csv("data/place_and_dist_version2.csv",
   // When reading the csv, I must format variables:
   
@@ -274,7 +289,41 @@ const transitionPath1 = d3
   .duration(5000);
 
 
-leg1.on("mouseover", function(){return circle.style("opacity",function(d){ 
+leg1.on("mouseover", function(){return update_1()
+      ;})
+text1.on("mouseover", function(){return update_1()
+      ;})
+leg1.on("mouseout", function(){return circle.style("opacity",1),circle1.style("opacity",1),path0.style("opacity",0),original_wordle()})
+text1.on("mouseout", function(){return circle.style("opacity",1),circle1.style("opacity",1),path0.style("opacity",0),original_wordle()})
+leg2.on("mouseover", function(){return update_2()
+            })
+text2.on("mouseover", function(){return update_2()
+            })
+leg2.on("mouseout", function(){return circle.style("opacity",1),circle1.style("opacity",1),path1.style("opacity",0),original_wordle()  })
+text2.on("mouseout", function(){return circle.style("opacity",1),circle1.style("opacity",1),path1.style("opacity",0),original_wordle()  })
+leg3.on("mouseover", function(){return update_3()
+          })
+text3.on("mouseover", function(){return update_3()
+          })
+leg3.on("mouseout", function(){return circle.style("opacity",1),circle1.style("opacity",1),path2.style("opacity",0),original_wordle()  })
+text3.on("mouseout", function(){return circle.style("opacity",1),circle1.style("opacity",1),path2.style("opacity",0),original_wordle()  })
+
+leg4.on("mouseover", function(){return update_4()})
+text4.on("mouseover", function(){return update_4()})
+leg4.on("mouseout", function(){return circle.style("opacity",1),circle1.style("opacity",1),path3.style("opacity",0),original_wordle()  })
+text4.on("mouseout", function(){return circle.style("opacity",1),circle1.style("opacity",1),path3.style("opacity",0),original_wordle()  })
+
+leg5.on("mouseover", function(){return update_5()})
+text5.on("mouseover", function(){return update_5()})
+leg5.on("mouseout", function(){return circle.style("opacity",1),circle1.style("opacity",1),path4.style("opacity",0),original_wordle()  })
+text5.on("mouseout", function(){return circle.style("opacity",1),circle1.style("opacity",1),path4.style("opacity",0),original_wordle()  })
+
+leg6.on("mouseover", function(){return update_6()})
+text6.on("mouseover", function(){return update_6()})
+leg6.on("mouseout", function(){return circle.style("opacity",1),circle1.style("opacity",1),path5.style("opacity",0),original_wordle()  })
+text6.on("mouseout", function(){return circle.style("opacity",1),circle1.style("opacity",1),path5.style("opacity",0),original_wordle()  })
+function update_1(){
+  circle.style("opacity",function(d){ 
             var a =d.age_class2
             if (a==1){
               return 1
@@ -293,13 +342,13 @@ leg1.on("mouseover", function(){return circle.style("opacity",function(d){
       .attr("stroke-dasharray", path0Length)
       .transition(transitionPath1)
       .attr("stroke-dashoffset", 0),
-      myimage .attr("xlink:href", "HoagOLife_wordle/wordcloud1_new.png").attr("x", "-65")
-.attr("y", "-65")
-.attr("width", "130")
-.attr("height", "130");
-      ;})
-leg1.on("mouseout", function(){return circle.style("opacity",0.3),circle1.style("opacity",0.1),path0.style("opacity",0)})
-leg2.on("mouseover", function(){return circle.style("opacity",function(d){ 
+      myimage .attr("xlink:href", "HoagOLife_wordle/wordcloud1_new.png").attr("x", "-55")
+.attr("y", "-55")
+.attr("width", "110")
+.attr("height", "110");
+}
+function update_2(){
+  circle.style("opacity",function(d){ 
             var a =d.age_class2
             if (a==2){
               return 1
@@ -318,13 +367,13 @@ leg2.on("mouseover", function(){return circle.style("opacity",function(d){
       .transition(transitionPath1)
       .attr("stroke-dashoffset", 0),
             myimage.attr("xlink:href", "HoagOLife_wordle/wordcloud2_new.png")
-.attr("x", "-65")
-.attr("y", "-65")
-.attr("width", "130")
-.attr("height", "130")
-            })
-leg2.on("mouseout", function(){return circle.style("opacity",0.3),circle1.style("opacity",0.1),path1.style("opacity",0)  })
-leg3.on("mouseover", function(){return circle.style("opacity",function(d){ 
+.attr("x", "-55")
+.attr("y", "-55")
+.attr("width", "110")
+.attr("height", "110")
+}
+function update_3(){
+  circle.style("opacity",function(d){ 
             var a =d.age_class2
             if (a==3){
               return 1
@@ -343,15 +392,13 @@ leg3.on("mouseover", function(){return circle.style("opacity",function(d){
       .transition(transitionPath1)
       .attr("stroke-dashoffset", 0),
       myimage.attr("xlink:href", "HoagOLife_wordle/wordcloud3_new.png")
-.attr("x", "-65")
-.attr("y", "-65")
-.attr("width", "130")
-.attr("height", "130");
-          })
-
-leg3.on("mouseout", function(){return circle.style("opacity",0.3),circle1.style("opacity",0.1),path2.style("opacity",0)  })
-
-leg4.on("mouseover", function(){return circle.style("opacity",function(d){ 
+.attr("x", "-55")
+.attr("y", "-55")
+.attr("width", "110")
+.attr("height", "110");
+}
+function update_4(){
+  circle.style("opacity",function(d){ 
             var a =d.age_class2
             if ((a==4)){
               return 1
@@ -370,14 +417,14 @@ leg4.on("mouseover", function(){return circle.style("opacity",function(d){
       .transition(transitionPath1)
       .attr("stroke-dashoffset", 0),
           myimage .attr("xlink:href", "HoagOLife_wordle/wordcloud4_new.png")
-.attr("x", "-65")
-.attr("y", "-65")
-.attr("width", "130")
-.attr("height", "130")
-;})
-leg4.on("mouseout", function(){return circle.style("opacity",0.3),circle1.style("opacity",0.1),path3.style("opacity",0)  })
-
-leg5.on("mouseover", function(){return circle.style("opacity",function(d){ 
+.attr("x", "-55")
+.attr("y", "-55")
+.attr("width", "110")
+.attr("height", "110")
+;
+}
+function update_5(){
+circle.style("opacity",function(d){ 
             var a =d.age_class2
             if (a==5){
               return 1
@@ -396,13 +443,13 @@ leg5.on("mouseover", function(){return circle.style("opacity",function(d){
       .transition(transitionPath1)
       .attr("stroke-dashoffset", 0),
           myimage.attr("xlink:href", "HoagOLife_wordle/wordcloud5_new.png")
-.attr("x", "-65")
-.attr("y", "-65")
-.attr("width", "130")
-.attr("height", "130");})
-leg5.on("mouseout", function(){return circle.style("opacity",0.3),circle1.style("opacity",0.1),path4.style("opacity",0)  })
-leg6.on("mouseover", function(){return circle.style("opacity",function(d){ 
-            var a =d.age_class2
+.attr("x", "-55")
+.attr("y", "-55")
+.attr("width", "110")
+.attr("height", "110");
+}
+function update_6(){
+  circle.style("opacity",function(d){ var a =d.age_class2
             if (a==6){
               return 1
             }
@@ -420,67 +467,17 @@ leg6.on("mouseover", function(){return circle.style("opacity",function(d){
       .transition(transitionPath1)
       .attr("stroke-dashoffset", 0),
          myimage.attr("xlink:href", "HoagOLife_wordle/wordcloud6_new.png")
-.attr("x", "-65")
-.attr("y", "-65")
-.attr("width", "130")
-.attr("height", "130")})
-leg6.on("mouseout", function(){return circle.style("opacity",0.3),circle1.style("opacity",0.1),path5.style("opacity",0)  })
-/*
-leg7.on("mouseover", function(){return circle1.style("opacity",function(d){ 
-            var a =d.place
-            var b = d.age_class
-            if ((a=='Hangzhou')&(b==1)){
-              return 1
-            }
-            else {return 0.1}})})
-leg7.on("mouseout", function(){return circle.style("opacity",0.3),circle1.style("opacity",0.1)})/*
-leg8.on("mouseover", function(){return circle.style("opacity",function(d){ 
-            var a =d.place
-            if (a=='Kaifeng'){
-              return 1
-            }
-            else {return 0.3}}),
-            circle1.style("opacity",function(d){ 
-            var a =d.place
-            if (a=='Kaifeng'){
-              return 1
-            }
-            else {return 0.1}})})
-leg8.on("mouseout", function(){return circle.style("opacity",0.3),circle1.style("opacity",0.1)})
-leg9.on("mouseover", function(){return circle.style("opacity",function(d){ 
-            var a =d.place
-            if (a=='Huanggang'){
-              return 1
-            }
-            else {return 0.3}}),
-            circle1.style("opacity",function(d){ 
-            var a =d.place
-            if (a=='Huanggang'){
-              return 1
-            }
-            else {return 0.1}})})
-leg9.on("mouseout", function(){return circle.style("opacity",0.3),circle1.style("opacity",0.1)})
-leg10.on("mouseover", function(){return circle.style("opacity",function(d){ 
-            var a =d.place
-            if (a=='Danzhou'){
-              return 1
-            }
-            else {return 0.3}}),
-            circle1.style("opacity",function(d){ 
-            var a =d.place
-            if (a=='Danzhou'){
-              return 1
-            }
-            else {return 0.1}})})
-leg10.on("mouseout", function(){return circle.style("opacity",0.3),circle1.style("opacity",0.1)})
-
-leg11.on("mouseover", function(){return circle.style("opacity",function(d){ 
-            var a =d.place
-            if ((a=='Meishan')|(a=='Xuzhou')|(a=='Taizhou')|(a=='Ganzhou')|(a=='Changzhou')|(a=='Qizhou')|(a=='Lianyungang')|(a=='Leshan')){
-              return 1
-            }
-            else {return 0.3}}),
-circle1.style('opacity',1)})
-*/
+.attr("x", "-55")
+.attr("y", "-55")
+.attr("width", "110")
+.attr("height", "110")}
+function original_wordle(){
+myimage = svg.append('image')
+.attr("xlink:href", "HoagOLife_wordle/wordcloud_new.png")
+.attr("x", "-50")
+.attr("y", "-50")
+.attr("width", "100")
+.attr("height", "100");  
+}
 
 </script>
